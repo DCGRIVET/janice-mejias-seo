@@ -17,6 +17,27 @@ const POST_AUTHOR = "Jordan Kilpatrick";
 const POST_HERO =
   "https://images.unsplash.com/photo-1530023367847-a683933f4172?auto=format&fit=crop&w=1600&q=70";
 
+// External links — official venue websites + authority sources
+const VENUE_WEBSITES: Record<string, string> = {
+  "casa-loma": "https://casaloma.ca/weddings/",
+  "liberty-grand": "https://libertygrand.com/",
+  "four-seasons": "https://www.fourseasons.com/toronto/weddings/",
+  "hotel-x": "https://www.hotelxtoronto.com/weddings/",
+  "steam-whistle": "https://steamwhistle.ca/private-events/",
+  "eglinton-grand": "https://eglintongrand.com/weddings/",
+  "fairmont-royal-york": "https://www.fairmont.com/royal-york-toronto/meetings-weddings/",
+  "evergreen-brick-works": "https://www.evergreen.ca/evergreen-brick-works/venue-rentals/",
+  "old-mill": "https://www.oldmilltoronto.com/weddings/",
+  "globe-and-mail-centre": "https://www.globeandmailcentre.com/",
+};
+
+const AUTHORITY_SOURCES = [
+  { name: "Toronto.com — Wedding venues guide", url: "https://www.toronto.com/things-to-do/" },
+  { name: "WeddingWire — Toronto venues directory", url: "https://www.weddingwire.ca/wedding-venues/ontario/toronto" },
+  { name: "The Knot — Toronto wedding venues", url: "https://www.theknot.com/marketplace/wedding-venues/toronto-on" },
+  { name: "Ontario Wedding Network", url: "https://www.ontarioweddingnetwork.com/" },
+];
+
 // 1. Title tag (≤ 60 chars, primary keyword first)
 // 2. Meta description (≤ 160 chars, keyword + CTA)
 // 3. Canonical URL
@@ -258,6 +279,7 @@ export default function BlogPostV3() {
             <Verdicts />
             <FAQ />
             <Close />
+            <Sources />
             <RelatedReading />
           </section>
         </article>
@@ -319,6 +341,25 @@ function Intro() {
         brutal on purpose &mdash; you&rsquo;re getting the venues planners and
         photographers actually whisper to each other about, not a 30-venue dump
         that wastes a Saturday.
+      </p>
+      <p>
+        Big-list highlights: a literal castle (
+        <a href="#casa-loma" className="font-semibold text-ink-900 underline decoration-ink-200 underline-offset-2 hover:decoration-ink-400">
+          Casa Loma
+        </a>
+        ), three ballrooms under one roof (
+        <a href="#liberty-grand" className="font-semibold text-ink-900 underline decoration-ink-200 underline-offset-2 hover:decoration-ink-400">
+          Liberty Grand
+        </a>
+        ), the best skyline shots in the city (
+        <a href="#hotel-x" className="font-semibold text-ink-900 underline decoration-ink-200 underline-offset-2 hover:decoration-ink-400">
+          Hotel X
+        </a>
+        ), and the most underrated value play in town (
+        <a href="#steam-whistle" className="font-semibold text-ink-900 underline decoration-ink-200 underline-offset-2 hover:decoration-ink-400">
+          Steam Whistle
+        </a>
+        ).
       </p>
       <p>Here&rsquo;s a few details for each:</p>
       <ul className="!mt-2 list-disc space-y-1 pl-6">
@@ -414,6 +455,33 @@ function Verdicts() {
               />
             </div>
           </div>
+
+          {VENUE_WEBSITES[v.slug] && (
+            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-ink-100 pt-4 text-xs">
+              <a
+                href={VENUE_WEBSITES[v.slug]}
+                target="_blank"
+                rel="noopener nofollow"
+                className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-3 py-1.5 font-semibold text-white transition hover:bg-ink-800"
+              >
+                Visit {v.name} <span aria-hidden>&rarr;</span>
+              </a>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.name + " Toronto")}`}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-1.5 rounded-full border border-ink-200 px-3 py-1.5 font-semibold text-ink-700 transition hover:border-ink-400"
+              >
+                View on Google Maps
+              </a>
+              <a
+                href={`#${v.slug === "casa-loma" ? "liberty-grand" : v.slug === "globe-and-mail-centre" ? "casa-loma" : VENUES[(i + 1) % VENUES.length].slug}`}
+                className="ml-auto text-ink-500 hover:text-ink-900 hover:underline"
+              >
+                Next: {VENUES[(i + 1) % VENUES.length].name} &darr;
+              </a>
+            </div>
+          )}
         </section>
       ))}
     </div>
@@ -482,6 +550,41 @@ function Close() {
   );
 }
 
+function Sources() {
+  return (
+    <aside
+      aria-labelledby="sources-heading"
+      className="!mt-16 rounded-2xl border border-ink-100 bg-white p-6"
+    >
+      <h2
+        id="sources-heading"
+        className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-600"
+      >
+        Sources &amp; further reading
+      </h2>
+      <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
+        {AUTHORITY_SOURCES.map((s) => (
+          <li key={s.url} className="flex items-start gap-2">
+            <span aria-hidden className="mt-1 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-ink-900" />
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener"
+              className="text-ink-700 hover:text-ink-900 hover:underline"
+            >
+              {s.name}{" "}
+              <span aria-hidden className="text-ink-400">&#8599;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-4 text-xs text-ink-500">
+        Capacity and pricing reflect public venue listings as of May 2026 &mdash; confirm directly with each venue before booking.
+      </p>
+    </aside>
+  );
+}
+
 function RelatedReading() {
   // 17. Internal linking → topical authority + lower bounce rate
   return (
@@ -506,13 +609,35 @@ function RelatedReading() {
         </li>
         <li className="rounded-xl border border-ink-100 bg-white p-4">
           <Link
-            href="/services/local-seo"
+            href="/blog/top-10-wedding-venues-in-toronto-v2"
             className="text-sm font-semibold text-ink-900 hover:underline"
           >
-            How we rank pages like this &rarr;
+            v2 of this post (dad-joke voice) &rarr;
           </Link>
           <p className="mt-1 text-xs text-ink-600">
-            The local SEO service that built this post.
+            Same content, voice file applied, no SEO layer.
+          </p>
+        </li>
+        <li className="rounded-xl border border-ink-100 bg-white p-4">
+          <Link
+            href="/services/plumbing-service-toronto"
+            className="text-sm font-semibold text-ink-900 hover:underline"
+          >
+            Plumbing service in Toronto &rarr;
+          </Link>
+          <p className="mt-1 text-xs text-ink-600">
+            Burst pipe before the wedding? Same-day service across the GTA.
+          </p>
+        </li>
+        <li className="rounded-xl border border-ink-100 bg-white p-4">
+          <Link
+            href="/feedback"
+            className="text-sm font-semibold text-ink-900 hover:underline"
+          >
+            Share your feedback &rarr;
+          </Link>
+          <p className="mt-1 text-xs text-ink-600">
+            Booked one of these venues? Tell us how it went.
           </p>
         </li>
       </ul>
