@@ -1,0 +1,388 @@
+import Link from "next/link";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import { DashboardMock } from "@/components/DashboardMock";
+
+const SITE_URL = "https://localseo.example";
+const PAGE_URL = `${SITE_URL}/services/local-seo`;
+const PHONE = "(416) 555-0142";
+
+export const metadata = {
+  title: "Plumbing Service Toronto · 24/7 Licensed Plumbers",
+  description:
+    "Toronto plumbing service that shows up fast. Burst pipes, water heaters, drain repair across the GTA. Licensed, insured, fixed-price quotes.",
+  alternates: { canonical: PAGE_URL },
+  openGraph: {
+    type: "website",
+    url: PAGE_URL,
+    title: "Plumbing Service Toronto · 24/7 Licensed Plumbers",
+    description:
+      "Toronto plumbing service that shows up fast. Burst pipes, water heaters, drain repair across the GTA.",
+    locale: "en_CA",
+  },
+};
+
+function JsonLd() {
+  const plumberSchema = {
+    "@context": "https://schema.org",
+    "@type": "Plumber",
+    name: "Acme Plumbing Service Toronto",
+    image: `${SITE_URL}/logo.png`,
+    "@id": PAGE_URL,
+    url: PAGE_URL,
+    telephone: PHONE,
+    priceRange: "$$",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "123 King St W",
+      addressLocality: "Toronto",
+      addressRegion: "ON",
+      postalCode: "M5H 1A4",
+      addressCountry: "CA",
+    },
+    areaServed: [
+      "Toronto",
+      "Mississauga",
+      "North York",
+      "Scarborough",
+      "Etobicoke",
+      "East York",
+    ],
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      opens: "00:00",
+      closes: "23:59",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "184",
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(plumberSchema) }}
+    />
+  );
+}
+
+export default function PlumbingServiceTorontoPage() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <JsonLd />
+      <SiteHeader />
+
+      <main className="flex-1">
+        <Hero />
+        <TrustedBy />
+        <WhatWeDo />
+        <CallToAction />
+      </main>
+
+      <SiteFooter />
+    </div>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 h-[420px] w-[920px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,_rgba(253,230,138,0.45)_0%,_transparent_60%)]" />
+      </div>
+
+      <div className="mx-auto max-w-6xl px-6 pt-20 pb-12 text-center">
+        <Pill>Toronto · 24/7 · Licensed</Pill>
+
+        <h1 className="mx-auto mt-6 max-w-4xl text-5xl font-semibold leading-[1.05] tracking-tightish text-ink-900 md:text-6xl">
+          Plumbing service in Toronto. Same-day. Fixed price.
+        </h1>
+
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-600">
+          Burst pipes, water heaters, drain repair across the GTA. Licensed,
+          insured, on time. We quote before we start &mdash; no surprises on
+          the invoice.
+        </p>
+
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a
+            href={`tel:${PHONE.replace(/[^\d+]/g, "")}`}
+            className="rounded-full bg-ink-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-ink-800"
+          >
+            Call {PHONE} <span className="ml-1">&rarr;</span>
+          </a>
+          <Link
+            href="/feedback"
+            className="rounded-full border border-ink-200 bg-white px-6 py-3 text-sm font-medium text-ink-800 transition hover:border-ink-400"
+          >
+            Book a free quote
+          </Link>
+        </div>
+
+        <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-ink-400">
+          Average response · 38 min &middot; 4.9★ from 184 Toronto reviews
+        </p>
+
+        <div className="mx-auto mt-14 max-w-5xl">
+          <DashboardMock />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TrustedBy() {
+  return (
+    <section className="border-t border-ink-100/80 bg-white">
+      <div className="mx-auto max-w-6xl px-6 py-16 text-center">
+        <Pill>Service area</Pill>
+        <h2 className="mt-4 text-2xl font-semibold tracking-tightish text-ink-900">
+          On call across the GTA
+        </h2>
+
+        <div className="mt-10 grid grid-cols-2 items-center justify-items-center gap-x-10 gap-y-8 text-ink-400 sm:grid-cols-3 md:grid-cols-6">
+          {AREAS.map((area) => (
+            <span
+              key={area}
+              className="text-lg font-semibold tracking-tight text-ink-400 transition hover:text-ink-800"
+            >
+              {area}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhatWeDo() {
+  return (
+    <section id="what-we-do" className="bg-[#fafaf9]">
+      <div className="mx-auto max-w-6xl px-6 py-20 text-center">
+        <Pill>What we fix</Pill>
+        <h2 className="mx-auto mt-4 max-w-2xl text-3xl font-semibold tracking-tightish text-ink-900 md:text-4xl">
+          The 4 things Toronto homeowners call us for
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-ink-600">
+          Same-day for emergencies. Booked in 48 hours for everything else.
+          One fixed price. No call-out fee if we don&rsquo;t fix it.
+        </p>
+
+        <div className="mt-12 grid gap-5 text-left md:grid-cols-2">
+          {SERVICES.map((s) => (
+            <ServiceCard key={s.title} {...s} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServiceCard({
+  pill,
+  title,
+  body,
+  visual,
+}: {
+  pill: string;
+  title: string;
+  body: string;
+  visual: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-ink-100 bg-white p-8 transition hover:border-ink-200">
+      <div className="flex items-center justify-center">
+        <span className="inline-flex items-center gap-2 rounded-full bg-ink-50 px-3 py-1 text-xs font-semibold text-ink-800">
+          <span className="text-base leading-none">&#9733;</span> {pill}
+        </span>
+      </div>
+      <div className="mt-6">{visual}</div>
+      <h3 className="mt-6 text-lg font-semibold tracking-tightish text-ink-900">
+        {title}
+      </h3>
+      <p className="mt-2 text-sm leading-relaxed text-ink-600">{body}</p>
+    </div>
+  );
+}
+
+function CallToAction() {
+  return (
+    <section className="border-t border-ink-100/80">
+      <div className="mx-auto max-w-6xl px-6 py-20">
+        <div className="rounded-2xl border border-ink-100 bg-white p-10 md:p-14">
+          <div className="grid items-center gap-8 md:grid-cols-[1.4fr_1fr]">
+            <div>
+              <h2 className="text-3xl font-semibold tracking-tightish text-ink-900 md:text-4xl">
+                Got water where it shouldn&rsquo;t be?
+              </h2>
+              <p className="mt-3 max-w-xl text-ink-600">
+                Call us before it spreads. 24/7 dispatch across Toronto and
+                the GTA. We&rsquo;ll be there in under an hour for emergencies,
+                with a fixed-price quote before any work starts.
+              </p>
+            </div>
+            <div className="flex flex-col items-stretch gap-3">
+              <a
+                href={`tel:${PHONE.replace(/[^\d+]/g, "")}`}
+                className="rounded-full bg-ink-900 px-6 py-3 text-center text-sm font-medium text-white transition hover:bg-ink-800"
+              >
+                Call now &middot; {PHONE}
+              </a>
+              <Link
+                href="/feedback"
+                className="rounded-full border border-ink-200 bg-white px-6 py-3 text-center text-sm font-medium text-ink-800 transition hover:border-ink-400"
+              >
+                Book a free quote
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Pill({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-ink-100 bg-white px-3 py-1 text-xs font-semibold text-ink-800 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+      <span className="inline-block h-1.5 w-1.5 rounded-full bg-ink-900" />
+      {children}
+    </span>
+  );
+}
+
+const AREAS = [
+  "Toronto",
+  "Mississauga",
+  "North York",
+  "Scarborough",
+  "Etobicoke",
+  "East York",
+];
+
+const SERVICES = [
+  {
+    pill: "Emergency",
+    title: "Burst pipe + water leak repair",
+    body:
+      "On-site in under an hour anywhere in Toronto. We isolate the line, find the leak, and patch it before your floors swell. 24/7, including holidays.",
+    visual: <EmergencyPanel />,
+  },
+  {
+    pill: "Water heater",
+    title: "Water heater install + repair",
+    body:
+      "Tankless or tank. Installed in 4 hours, 12-year warranty, same-day quotes across the GTA. Same-day swap if yours died this morning.",
+    visual: <HeaterPanel />,
+  },
+  {
+    pill: "Drain",
+    title: "Drain cleaning + camera inspection",
+    body:
+      "Backed-up basement? We snake it, scope it with a camera, and show you the footage. Quoted per job, not per hour &mdash; you see the price before we start.",
+    visual: <DrainPanel />,
+  },
+  {
+    pill: "Renovation",
+    title: "Bathroom + kitchen rough-in",
+    body:
+      "Working with your contractor or solo. Permits pulled, code-compliant, inspected. Toronto-licensed master plumber on every job.",
+    visual: <RenoPanel />,
+  },
+];
+
+function EmergencyPanel() {
+  return (
+    <div className="rounded-xl border border-ink-100 bg-[#fafaf9] p-4">
+      <div className="flex items-center justify-between text-xs font-semibold text-ink-400">
+        <span>Average response</span>
+        <span className="rounded-full bg-ink-900 px-2 py-0.5 text-[10px] text-[#fde68a]">
+          24/7
+        </span>
+      </div>
+      <div className="mt-3 flex items-baseline gap-3">
+        <span className="font-mono text-4xl font-bold text-ink-900">38</span>
+        <span className="text-sm font-semibold text-ink-600">min</span>
+      </div>
+      <p className="mt-3 text-xs leading-relaxed text-ink-600">
+        Median across <span className="font-semibold text-ink-900">184 Toronto calls</span> in the last 90 days.
+      </p>
+    </div>
+  );
+}
+
+function HeaterPanel() {
+  return (
+    <div className="rounded-xl border border-ink-100 bg-[#fafaf9] p-4">
+      <ul className="space-y-2 text-sm">
+        {[
+          { label: "Tankless install", time: "4 hrs" },
+          { label: "Tank swap", time: "2 hrs" },
+          { label: "Warranty included", time: "12 yrs" },
+        ].map((r) => (
+          <li
+            key={r.label}
+            className="flex items-center justify-between rounded-lg border border-ink-100 bg-white px-3 py-2"
+          >
+            <span className="text-ink-800">{r.label}</span>
+            <span className="font-mono text-xs font-bold text-ink-900">
+              {r.time}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function DrainPanel() {
+  return (
+    <div className="rounded-xl border border-ink-100 bg-[#fafaf9] p-4">
+      <div className="text-xs font-semibold text-ink-400">Fixed-price jobs</div>
+      <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+        {[
+          { job: "Snake", price: "$189" },
+          { job: "Camera scope", price: "$249" },
+          { job: "Hydro-jet", price: "$489" },
+          { job: "Line locate", price: "$179" },
+        ].map((j) => (
+          <div
+            key={j.job}
+            className="rounded-lg border border-ink-100 bg-white px-3 py-2"
+          >
+            <div className="text-ink-600">{j.job}</div>
+            <div className="font-mono text-base font-bold text-ink-900">
+              {j.price}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RenoPanel() {
+  return (
+    <div className="rounded-xl border border-ink-100 bg-[#fafaf9] p-4">
+      <ul className="space-y-2 text-sm text-ink-800">
+        {[
+          "Toronto-licensed master plumber",
+          "Permits pulled · code compliant",
+          "Insured to $5M",
+          "Works direct with your GC",
+        ].map((t) => (
+          <li
+            key={t}
+            className="flex items-start gap-2 rounded-lg border border-ink-100 bg-white px-3 py-2"
+          >
+            <span className="mt-0.5 text-[#fde68a]">&#10003;</span>
+            <span>{t}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
