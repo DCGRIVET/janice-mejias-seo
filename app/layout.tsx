@@ -13,11 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en-CA">
-      <head>
-        {/* Preconnect to image CDN so the LCP image starts loading faster */}
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
-      </head>
+      <head></head>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
