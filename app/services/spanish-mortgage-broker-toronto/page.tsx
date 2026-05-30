@@ -176,6 +176,22 @@ export default function SpanishMortgageBrokerTorontoPage() {
         <BookingCta />
       </main>
       <PageFooter />
+      <script dangerouslySetInnerHTML={{__html:`
+        (function(){
+          var btns = document.querySelectorAll('.lang-btn');
+          btns.forEach(function(btn){
+            btn.addEventListener('click', function(){
+              var l = btn.getAttribute('data-lang');
+              document.documentElement.setAttribute('data-lang', l);
+              btns.forEach(function(b){
+                var active = b.getAttribute('data-lang') === l;
+                b.classList.toggle('active', active);
+                b.setAttribute('aria-pressed', active ? 'true' : 'false');
+              });
+            });
+          });
+        })();
+      `}} />
     </div>
   );
 }
@@ -194,19 +210,32 @@ function PageHeader() {
         </a>
 
         <nav className="hidden items-center gap-8 text-sm text-ink-600 md:flex" aria-label="Page navigation">
-          <a className="transition hover:text-ink-900" href="#services">Services</a>
-          <a className="transition hover:text-ink-900" href="#area">Service area</a>
+          <a className="transition hover:text-ink-900" href="#services">
+            <span className="en-only">Services</span><span className="es-only">Servicios</span>
+          </a>
+          <a className="transition hover:text-ink-900" href="#area">
+            <span className="en-only">Service area</span><span className="es-only">Área</span>
+          </a>
           <a className="transition hover:text-ink-900" href="#faq">FAQ</a>
-          <a className="transition hover:text-ink-900" href="#contact">Contact</a>
+          <a className="transition hover:text-ink-900" href="#contact">
+            <span className="en-only">Contact</span><span className="es-only">Contacto</span>
+          </a>
         </nav>
 
-        <a
-          href={`tel:${PHONE_RAW}`}
-          aria-label={`Call ${AGENT} at ${PHONE}`}
-          className="rounded-full bg-[#004282] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#003060]"
-        >
-          Call {PHONE}
-        </a>
+        <div className="flex items-center gap-3">
+          <div className="lang-pill" role="group" aria-label="Select language">
+            <button className="lang-btn active" data-lang="en" type="button" aria-pressed="true">EN</button>
+            <button className="lang-btn" data-lang="es" type="button" aria-pressed="false">ES</button>
+          </div>
+          <a
+            href={`tel:${PHONE_RAW}`}
+            aria-label={`Call ${AGENT} at ${PHONE}`}
+            className="rounded-full bg-[#004282] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#003060]"
+          >
+            <span className="en-only">Call {PHONE}</span>
+            <span className="es-only">Llamar {PHONE}</span>
+          </a>
+        </div>
       </div>
 
       {/* Breadcrumb */}
@@ -228,6 +257,28 @@ function PageHeader() {
 function HeroStyles() {
   return (
     <style>{`
+      /* ── Language toggle ── */
+      .es-only { display:none; }
+      [data-lang="es"] .es-only { display:revert; }
+      [data-lang="es"] .en-only { display:none; }
+
+      .lang-pill {
+        display:flex;align-items:center;
+        background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+        border-radius:24px;padding:3px;gap:2px;
+      }
+      .scrolled-nav .lang-pill {
+        background:var(--light,#f0f4f8);border-color:var(--border,#e5e7eb);
+      }
+      .lang-btn {
+        padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;
+        border:none;cursor:pointer;background:transparent;
+        color:rgba(255,255,255,.65);transition:all .2s;font-family:inherit;
+      }
+      .scrolled-nav .lang-btn { color:#6B7280; }
+      .lang-btn.active { background:rgba(255,255,255,.9);color:#00274e; }
+      .scrolled-nav .lang-btn.active { background:#004282;color:#fff; }
+
       .h-scene { background: #070d16; }
 
       @keyframes orb-drift-a {
@@ -423,11 +474,21 @@ function Hero() {
 
             {/* H1 */}
             <h1 id="hero-heading">
-              <span className="h-display h-line1 block">Spanish mortgage</span>
-              <span className="h-bold h-line2 block">broker in Toronto.</span>
-              <span className="h-gold-italic h-line3 block mt-1">The banks said no.</span>
+              <span className="h-display h-line1 block">
+                <span className="en-only">Spanish mortgage</span>
+                <span className="es-only">La corredora</span>
+              </span>
+              <span className="h-bold h-line2 block">
+                <span className="en-only">broker in Toronto.</span>
+                <span className="es-only">hipotecaria en Toronto.</span>
+              </span>
+              <span className="h-gold-italic h-line3 block mt-1">
+                <span className="en-only">The banks said no.</span>
+                <span className="es-only">El banco dijo que no.</span>
+              </span>
               <span className="h-gold-dim h-gold-dim-anim block">
-                We find who says yes.
+                <span className="en-only">We find who says yes.</span>
+                <span className="es-only">Nosotros encontramos quién dice sí.</span>
               </span>
             </h1>
 
@@ -436,20 +497,21 @@ function Hero() {
               style={{background:'linear-gradient(90deg,#d5aa41,rgba(213,170,65,.4) 60%,transparent)'}}
             />
 
-            {/* Spanish subtitle */}
+            {/* Subtitle */}
             <p className="h-sub mb-4 font-light italic" style={{
               fontFamily:"var(--font-cormorant),Georgia,serif",
               fontSize:'1.15rem',
               color:'rgba(255,255,255,.65)',
               letterSpacing:'.01em',
             }}>
-              Para la comunidad hispana. Sin importar lo que dijo el banco.
+              <span className="en-only">For the Spanish-speaking community. No matter what the bank said.</span>
+              <span className="es-only">Para la comunidad hispana. Sin importar lo que dijo el banco.</span>
             </p>
 
             {/* Body */}
             <p className="h-body mb-8 max-w-md text-sm leading-relaxed" style={{color:'rgba(255,255,255,.72)'}}>
-              {AGENT} is a licensed mortgage agent with {BROKERAGE}, serving Spanish-speaking Canadians across the GTA.
-              Self-employed, newcomers, private mortgages — situations most brokers won&rsquo;t touch. In English and in Spanish.
+              <span className="en-only">{AGENT} is a licensed mortgage agent with {BROKERAGE}, serving Spanish-speaking Canadians across the GTA. Self-employed, newcomers, private mortgages — situations most brokers won&rsquo;t touch. In English and in Spanish.</span>
+              <span className="es-only">{AGENT} es agente hipotecaria licenciada con {BROKERAGE}, al servicio de canadienses de habla hispana en el GTA. Trabajadores independientes, recién llegados, hipotecas privadas — situaciones que la mayoría no atienden.</span>
             </p>
 
             {/* CTAs */}
@@ -461,12 +523,14 @@ function Hero() {
                   color:'#070d16',
                   boxShadow:'0 8px 32px rgba(213,170,65,.35)',
                 }}>
-                Call {PHONE} &rarr;
+                <span className="en-only">Call {PHONE} &rarr;</span>
+                <span className="es-only">Llamar {PHONE} &rarr;</span>
               </a>
               <a href={`mailto:${EMAIL}`}
                 className="inline-flex items-center rounded-full border px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:-translate-y-0.5"
                 style={{borderColor:'rgba(255,255,255,.18)',background:'rgba(255,255,255,.07)'}}>
-                Free consultation
+                <span className="en-only">Free consultation</span>
+                <span className="es-only">Consulta gratuita</span>
               </a>
             </div>
 
@@ -474,11 +538,11 @@ function Hero() {
             <div className="h-trust flex flex-wrap items-center gap-3 text-xs" style={{color:'rgba(255,255,255,.62)'}}>
               <span className="font-semibold" style={{color:'rgba(213,170,65,.95)'}}>{RATING}★ Google</span>
               <span className="h-3 w-px" style={{background:'rgba(255,255,255,.12)'}}/>
-              <span>{REVIEW_CT}+ reviews</span>
+              <span><span className="en-only">{REVIEW_CT}+ reviews</span><span className="es-only">{REVIEW_CT}+ reseñas</span></span>
               <span className="h-3 w-px" style={{background:'rgba(255,255,255,.12)'}}/>
               <span>{LICENCE}</span>
               <span className="h-3 w-px" style={{background:'rgba(255,255,255,.12)'}}/>
-              <span>FSRA regulated</span>
+              <span><span className="en-only">FSRA regulated</span><span className="es-only">Regulada por FSRA</span></span>
             </div>
           </div>
 
@@ -663,12 +727,13 @@ function WhoWeHelp() {
   return (
     <section id="services" aria-labelledby="services-heading" className="bg-ink-50/50">
       <div className="mx-auto max-w-6xl px-6 py-20 text-center">
-        <Pill>Who we help</Pill>
+        <Pill><span className="en-only">Who we help</span><span className="es-only">A quién ayudamos</span></Pill>
         <h2
           id="services-heading"
           className="mx-auto mt-4 max-w-3xl text-3xl font-semibold tracking-tightish text-ink-900 md:text-4xl"
         >
-          Mortgage situations the banks turn down
+          <span className="en-only">Mortgage situations the banks turn down</span>
+          <span className="es-only">Situaciones hipotecarias que los bancos rechazan</span>
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-ink-600">
           If you have a steady T4 job, great credit, and just want the lowest posted rate — any broker can help you.
@@ -712,9 +777,10 @@ function Testimonials() {
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <Pill>Client reviews</Pill>
+            <Pill><span className="en-only">Client reviews</span><span className="es-only">Reseñas de clientes</span></Pill>
             <h2 id="reviews-heading" className="mt-3 text-3xl font-semibold tracking-tightish text-ink-900">
-              Rated {RATING}★ on Google.
+              <span className="en-only">Rated {RATING}★ on Google.</span>
+              <span className="es-only">Calificación {RATING}★ en Google.</span>
             </h2>
           </div>
           <p className="text-sm text-ink-600">{REVIEW_CT}+ verified reviews</p>
@@ -753,12 +819,14 @@ function ServiceArea() {
   return (
     <section id="area" aria-labelledby="area-heading" className="border-t border-ink-100/80 bg-[#00274e]">
       <div className="mx-auto max-w-6xl px-6 py-16 text-center text-white">
-        <Pill light>Service area · Ontario</Pill>
+        <Pill light><span className="en-only">Service area · Ontario</span><span className="es-only">Área de servicio · Ontario</span></Pill>
         <h2 id="area-heading" className="mt-4 text-2xl font-semibold tracking-tightish">
-          Serving Spanish-speaking clients across Ontario
+          <span className="en-only">Serving Spanish-speaking clients across Ontario</span>
+          <span className="es-only">Atendiendo a clientes de habla hispana en todo Ontario</span>
         </h2>
         <p className="mt-3 text-sm text-white/60 max-w-xl mx-auto">
-          Licensed to arrange mortgages province-wide. Consultations available by phone, video, or in person in Kitchener-Waterloo.
+          <span className="en-only">Licensed to arrange mortgages province-wide. Consultations available by phone, video, or in person in Kitchener-Waterloo.</span>
+          <span className="es-only">Licenciada para gestionar hipotecas en toda la provincia. Consultas por teléfono, video o en persona en Kitchener-Waterloo.</span>
         </p>
 
         <div className="mt-10 grid grid-cols-3 items-center justify-items-center gap-x-8 gap-y-5 sm:grid-cols-4 md:grid-cols-6">
@@ -784,7 +852,8 @@ function FaqSection() {
         <div className="text-center">
           <Pill>FAQ</Pill>
           <h2 id="faq-heading" className="mt-4 text-3xl font-semibold tracking-tightish text-ink-900">
-            Answers before you call
+            <span className="en-only">Answers before you call</span>
+            <span className="es-only">Respuestas antes de llamar</span>
           </h2>
           <p className="mt-3 text-ink-600">Questions we hear every week. Answered straight.</p>
         </div>
@@ -811,10 +880,12 @@ function BookingCta() {
           <div className="grid items-start gap-8 md:grid-cols-[1.5fr_1fr]">
             <div>
               <h2 id="cta-heading" className="text-3xl font-semibold tracking-tightish text-ink-900 md:text-4xl">
-                Not sure if you qualify?<br />Call and find out.
+                <span className="en-only">Not sure if you qualify?<br />Call and find out.</span>
+                <span className="es-only">¿No sabes si calificas?<br />Llama y averígualo.</span>
               </h2>
               <p className="mt-4 max-w-xl text-ink-600">
-                A 20-minute call covers most situations. You&rsquo;ll know where you stand on lender options, rate expectations, and next steps — with no commitment and no fee.
+                <span className="en-only">A 20-minute call covers most situations. You&rsquo;ll know where you stand on lender options, rate expectations, and next steps — with no commitment and no fee.</span>
+                <span className="es-only">Una llamada de 20 minutos cubre la mayoría de situaciones. Sabrás dónde estás con opciones de prestamistas, tasas y próximos pasos — sin compromiso ni costo.</span>
               </p>
               <p className="mt-3 text-sm text-ink-500">
                 <strong className="text-ink-800">{AGENT}</strong> &middot; {BROKERAGE} &middot; {LICENCE} &middot; Regulated by FSRA
